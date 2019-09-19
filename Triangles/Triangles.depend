@@ -1,0 +1,8 @@
+# depslib dependency file v1.0
+1567976168 source:/home/bluebird/randomCPPs/ogl/Triangles/main.cpp
+	<iostream>
+	<string>
+	<math.h>
+	<GL/glew.h>
+	<GLFW/glfw3.h>
+

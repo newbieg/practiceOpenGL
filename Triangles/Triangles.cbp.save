@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="Triangles" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Option virtualFolders="res/;" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin/Debug/Triangles" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+				</Compiler>
+				<Linker>
+					<Add library="bin/Debug/libGLEW.so" />
+					<Add library="bin/Debug/libglfw.so" />
+				</Linker>
+			</Target>
+			<Target title="Release">
+				<Option output="bin/Release/Triangles" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="0" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+					<Add library="bin/Release/libGLEW.so" />
+					<Add library="bin/Release/libglfw.so" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wnon-virtual-dtor" />
+			<Add option="-Winline" />
+			<Add option="-Weffc++" />
+			<Add option="-Wzero-as-null-pointer-constant" />
+			<Add option="-Wextra" />
+			<Add option="-Wall" />
+		</Compiler>
+		<Linker>
+			<Add library="GL" />
+			<Add library="X11" />
+		</Linker>
+		<Unit filename="main.cpp" />
+		<Extensions>
+			<code_completion />
+			<debugger />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>
