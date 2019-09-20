@@ -27,16 +27,44 @@ class window
 	void setGLVersion(std::string version);
 	// Print out data about the current version of GL and GLSL
 	void printStats(); 
+	void handleKeys();
 
 	private:
+	GLFWwindow * win;
+	
 
 };
 
 
+window(std::string title, int width, int height);
+{
+	win = NULL;
+	if(!(glfwInit()))
+	{
+		std::cout << "Failed to call glfw\n";
+	}
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+	glfwWindowHint(GLFW_RESIZABLE, GL_TRUE);
+	wind = glfwCreateWindow(width, height, title.c_str(), NULL, NULL);
+}
+
+
 window::window()
 {
-	
+	win = NULL;
+	if(!(glfwInit()))
+	{
+		std::cout << "Failed to call glfw\n";
+	}
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+	glfwWindowHint(GLFW_RESIZABLE, GL_TRUE);
+	wind = glfwCreateWindow(800, 640, "Title:Default", NULL, NULL);
 }
+
 
 void window::printStats()
 {
@@ -48,12 +76,22 @@ void window::printStats()
 }
 
 
+void window::setGLVersion(std::string versionNum)
+{
+	
+}
+
+
 ////////////////////////////////////////////////////////////
 
+// an object consists of a VAO and all associated VBO's
+// as well as all data that might be required should 
+// the object need to be modified on the fly.
 class object
 {
 	public:
 	object();
+	void addShader(GLuint type, const std::string & src);
 	private:
 
 };
@@ -122,17 +160,6 @@ void handle_keys(GLFWwindow * window, int key, int scancode, int action, int mod
 
 int main()
 {
-    GLFWwindow * wind = NULL;
-    if(!(glfwInit())){
-		std::cout << "Failed to call glfw\n";
-		return -1;
-    }
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-    glfwWindowHint(GLFW_RESIZABLE, GL_TRUE);
-
-    wind = glfwCreateWindow(800, 600, "MY FIRST GLPROJECT: GLFW", NULL, NULL);
     glfwSetKeyCallback(wind,handle_keys);
 
     if(wind == NULL)
