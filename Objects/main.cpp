@@ -98,7 +98,16 @@ void window::printStats()
 	const unsigned char * vendor = glGetString(GL_VENDOR);
 	const unsigned char * version = glGetString(GL_VERSION);
 	const unsigned char * shaderVersion = glGetString(GL_SHADING_LANGUAGE_VERSION); 
-	std::cout << "Renderer: " << renderer << "\nVendor: " << vendor << "\nVersion: " << version << "GLSL_Version: " << shaderVersion << "\n";
+	std::cout << "Renderer: " << renderer << "\nVendor: " << vendor << "\nVersion: " << version << "\nGLSL_Version: " << shaderVersion << "\n";
+
+	std::cout << "Extensions available: \n";
+	int exNum = 0;
+	glGetIntegerv(GL_NUM_EXTENSIONS, &exNum);
+	for(int i = 0; i < exNum; i ++)
+	{
+		std::cout << i << ": " << glGetStringi(GL_EXTENSIONS, i) << std::endl;
+	}
+	std::cout << std::endl;
 }
 
 
@@ -135,8 +144,10 @@ class object
 {
 	public:
 	object();
+	void addVBO(GLuint vbo);
 	void addShader(GLuint type, const std::string & src);
 	private:
+	GLuint VAO;
 
 };
 
@@ -196,6 +207,7 @@ static GLuint createShader(const std::string & vertexShader, const std::string &
 int main()
 {
 	window win1("Don't freak out", 400, 400);
+	win1.printStats();
     glClearColor(0.3, 0.3, 0.3, 0.5);
     glViewport(0,0,800, 600);
     GLfloat verts [] = {
