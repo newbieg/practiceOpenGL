@@ -4,7 +4,6 @@ with a youtuber's tutorials (The Cherno)
 Great resources:
 	docs.gl - full descriptions of gl functions and their basic use.
 
-
 . */
 
 
@@ -27,7 +26,9 @@ class window
 	void setGLVersion(std::string version);
 	// Print out data about the current version of GL and GLSL
 	void printStats(); 
-	void handleKeys();
+	static void handleKeys(GLFWwindow * window, int key, int scancode, int action, int mode);
+	bool good();
+	GLFWwindow * getBuffer();
 
 	private:
 	GLFWwindow * win;
@@ -36,7 +37,7 @@ class window
 };
 
 
-window(std::string title, int width, int height);
+window::window(std::string title, int width, int height)
 {
 	win = NULL;
 	if(!(glfwInit()))
@@ -47,7 +48,18 @@ window(std::string title, int width, int height);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	glfwWindowHint(GLFW_RESIZABLE, GL_TRUE);
-	wind = glfwCreateWindow(width, height, title.c_str(), NULL, NULL);
+	win = glfwCreateWindow(width, height, title.c_str(), NULL, NULL);
+	glfwSetKeyCallback(win, this->handleKeys);
+	if(win == NULL)
+	{
+		std::cout << "Failed to create Window\n";
+	}
+	glfwMakeContextCurrent(win); //MUST be called before glewInit()
+	glewExperimental = GL_TRUE;
+	if(glewInit() != GLEW_OK)
+	{
+		std::cout << "Glew Failed to initialize, must be done before calling GL functions\n";
+	}
 }
 
 
@@ -62,16 +74,30 @@ window::window()
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	glfwWindowHint(GLFW_RESIZABLE, GL_TRUE);
-	wind = glfwCreateWindow(800, 640, "Title:Default", NULL, NULL);
+	win = glfwCreateWindow(800, 640, "Title:Default", NULL, NULL);
+
+	glfwSetKeyCallback(win,this->handleKeys);
+
+	if(win == NULL)
+	{
+		std::cout << "Failed to create Window\n";
+	}
+	glfwMakeContextCurrent(win); //MUST be called before glewInit()
+	glewExperimental = GL_TRUE;
+
+	if(glewInit() != GLEW_OK)
+	{
+		std::cout << "Glew Failed to initialize, must be done before calling GL functions\n";
+	}
 }
 
 
 void window::printStats()
 {
-	const char* renderer = glGetString(GL_RENDERER);
-	const char * vendor = glGetString(GL_VENDOR);
-	const char * version = glGetString(GL_VERSION);
-	const char * shaderVersion = glGetString(GL_SHADER_LANGUAGE_VERSION); 
+	const unsigned char* renderer = glGetString(GL_RENDERER);
+	const unsigned char * vendor = glGetString(GL_VENDOR);
+	const unsigned char * version = glGetString(GL_VERSION);
+	const unsigned char * shaderVersion = glGetString(GL_SHADING_LANGUAGE_VERSION); 
 	std::cout << "Renderer: " << renderer << "\nVendor: " << vendor << "\nVersion: " << version << "GLSL_Version: " << shaderVersion << "\n";
 }
 
@@ -79,6 +105,24 @@ void window::printStats()
 void window::setGLVersion(std::string versionNum)
 {
 	
+}
+
+void window::handleKeys(GLFWwindow * window, int key, int scancode, int action, int mode)
+{
+	if(key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+	{
+		glfwSetWindowShouldClose(window, GL_TRUE);
+	}
+}
+
+bool window::good()
+{
+    return (!(glfwWindowShouldClose(win)));
+}
+
+GLFWwindow* window::getBuffer()
+{
+	return win;
 }
 
 
@@ -147,34 +191,11 @@ static GLuint createShader(const std::string & vertexShader, const std::string &
 	return program;
 }
 
-void handle_keys(GLFWwindow * window, int key, int scancode, int action, int mode)
-{
-	if(key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
-	{
-		glfwSetWindowShouldClose(window, GL_TRUE);
-
-	}
-}
-
 
 
 int main()
 {
-    glfwSetKeyCallback(wind,handle_keys);
-
-    if(wind == NULL)
-    {
-    	std::cout << "Failed to create Window\n";
-    	return -1;
-    }
-    glfwMakeContextCurrent(wind); //MUST be called before glewInit()
-    glewExperimental = GL_TRUE;
-
-    if(glewInit() != GLEW_OK)
-    {
-    	std::cout << "Glew Failed to initialize, must be done before calling GL functions\n";
-    	return -1;
-    }
+	window win1("Don't freak out", 400, 400);
     glClearColor(0.3, 0.3, 0.3, 0.5);
     glViewport(0,0,800, 600);
     GLfloat verts [] = {
@@ -226,13 +247,13 @@ int main()
 
 
 
-    while (!(glfwWindowShouldClose(wind)))
+    while (win1.good())
     {
 	    glClear(GL_COLOR_BUFFER_BIT);
 
 	    glDrawArrays(GL_TRIANGLES, 0, 3);
 
-    	glfwSwapBuffers(wind);
+    	glfwSwapBuffers(win1.getBuffer());
     	glfwPollEvents();
 
     }
